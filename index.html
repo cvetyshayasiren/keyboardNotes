@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Клавиатурные заметки</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.5/800.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/500.css">
+<style>
+:root{
+  --kh:clamp(40px,4.5vw,58px);
+  --gap:clamp(4px,.55vw,8px);
+  --pad:clamp(16px,2.4vw,34px);
+  --chrome:152px;
+}
+
+/* ============ ЦВЕТОВЫЕ СХЕМЫ (8) ============ */
+body[data-theme="night"]{
+  --bg:#07070e; --glow1:#1a1440; --glow2:#06303d; --glow3:#25103a;
+  --grid:rgba(255,255,255,.028); --blob-op:.4; --bl1:#6d4bff; --bl2:#0ea5c4; --bl3:#c026d3;
+  --panel:rgba(255,255,255,.035); --panel2:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.09); --inset:rgba(255,255,255,.06);
+  --txt:#e9eaf6; --txt-strong:#d3d6ea; --mut:#8a8ea9;
+  --acc:#7c5cff; --acc2:#22d3ee; --danger:#ff5c7a; --on-acc:#fff; --acc-soft:rgba(124,92,255,.16);
+  --shadow-c:rgba(0,0,0,.9); --scrim:rgba(4,4,10,.72);
+  --k1:#23252f; --k2:#171821; --kb:rgba(255,255,255,.085); --kt:#d6d9ea;
+  --k3:#0b0c12; --k4:rgba(0,0,0,.9); --k5:rgba(255,255,255,.07); --ksub:#8a8ea9;
+  --k-hover:rgba(255,255,255,.2); --k-hov-sh:rgba(0,0,0,.9);
+  --note-l1:40%; --note-l2:24%; --note-shadow-l:14%; --note-txt:#fff;
+  --note-glow:.55; --note-hi:.28; --note-ts:0 1px 3px rgba(0,0,0,.45);
+  --note-sub:88%; --note-bord-l:55%;
+  --bub-bg:rgba(18,19,30,.94); --bub-txt:#f0f1fb;
+  --modal1:rgba(30,31,46,.98); --modal2:rgba(18,19,29,.98);
+  --field:rgba(0,0,0,.32); --field2:rgba(0,0,0,.42); --chip:rgba(255,255,255,.08);
+  --item:rgba(255,255,255,.035); --item2:rgba(255,255,255,.075);
+  --grad1:#ffffff; --grad2:#a9b4ff; --knob:#fff;
+  --surface:#1a1b24; --neu-l:#262833; --neu-d:#0c0d13;
+}
+body[data-theme="neon"]{
+  --bg:#05060c; --glow1:#2a0a4a; --glow2:#04343f; --glow3:#3d0530;
+  --grid:rgba(255,255,255,.045); --blob-op:.45; --bl1:#ff2fb9; --bl2:#00ffc8; --bl3:#6d5bff;
+  --acc:#ff2fb9; --acc2:#00ffc8; --acc-soft:rgba(255,47,185,.16);
+  --txt:#eaf6ff; --txt-strong:#dceaf7; --mut:#7f8fa6;
+  --k1:#1b2130; --k2:#10141d; --kb:rgba(255,255,255,.1); --kt:#dfe6f5;
+  --k3:#05070c; --k5:rgba(255,255,255,.08); --ksub:#8394ab;
+  --note-l1:46%; --note-l2:26%; --note-glow:.7;
+  --bub-bg:rgba(10,14,24,.95); --modal1:rgba(20,25,40,.98); --modal2:rgba(10,13,22,.98);
+  --grad2:#7ef9dc;
+  --surface:#141a26; --neu-l:#1e2635; --neu-d:#090c13;
+}
+body[data-theme="sunset"]{
+  --bg:#120a0c; --glow1:#4a1730; --glow2:#3d2410; --glow3:#2a0f2a;
+  --grid:rgba(255,220,190,.035); --blob-op:.4; --bl1:#ff8a4c; --bl2:#ff2f86; --bl3:#ffc93c;
+  --acc:#ff8a4c; --acc2:#ffd166; --acc-soft:rgba(255,138,76,.16);
+  --txt:#f7e9e2; --txt-strong:#f0dcd2; --mut:#a38d86;
+  --line:rgba(255,205,170,.12); --panel:rgba(255,220,200,.04); --panel2:rgba(255,220,200,.075);
+  --k1:#2e2126; --k2:#1e1518; --kb:rgba(255,200,160,.13); --kt:#f0dcd2;
+  --k3:#100a0b; --k5:rgba(255,220,200,.08); --ksub:#a08b84;
+  --note-l1:44%; --note-l2:27%; --note-glow:.6;
+  --bub-bg:rgba(32,20,22,.95); --modal1:rgba(46,30,32,.98); --modal2:rgba(28,18,20,.98);
+  --field:rgba(0,0,0,.35); --chip:rgba(255,220,200,.09);
+  --item:rgba(255,220,200,.04); --item2:rgba(255,220,200,.09);
+  --grad2:#ffc48a;
+  --surface:#241a1d; --neu-l:#33252a; --neu-d:#150e10;
+}
+body[data-theme="matrix"]{
+  --bg:#040a06; --glow1:#06301a; --glow2:#032b23; --glow3:#0a3a12;
+  --grid:rgba(120,255,170,.05); --blob-op:.4; --bl1:#35e07a; --bl2:#a3ff5c; --bl3:#00b3a4;
+  --acc:#35e07a; --acc2:#b6ff5c; --acc-soft:rgba(53,224,122,.15);
+  --txt:#e2fff0; --txt-strong:#cdf5da; --mut:#6f9c85;
+  --line:rgba(120,255,170,.14); --panel:rgba(120,255,170,.035); --panel2:rgba(120,255,170,.07);
+  --k1:#14231a; --k2:#0d1712; --kb:rgba(120,255,170,.14); --kt:#cdf5da;
+  --k3:#050b07; --k5:rgba(150,255,190,.08); --ksub:#6f9c85;
+  --note-l1:40%; --note-l2:21%; --note-glow:.65;
+  --bub-bg:rgba(8,20,14,.95); --modal1:rgba(14,32,22,.98); --modal2:rgba(8,18,13,.98);
+  --field:rgba(0,0,0,.4); --chip:rgba(120,255,170,.09);
+  --item:rgba(120,255,170,.04); --item2:rgba(120,255,170,.09);
+  --grad1:#eafff2; --grad2:#7dffab;
+  --surface:#101c15; --neu-l:#1a2c21; --neu-d:#070d09;
+}
+body[data-theme="ocean"]{
+  --bg:#050b14; --glow1:#072a4a; --glow2:#04343f; --glow3:#0a1a3a;
+  --grid:rgba(160,210,255,.035); --blob-op:.42; --bl1:#2f80ff; --bl2:#00d3c0; --bl3:#7a5cff;
+  --acc:#3b9dff; --acc2:#35e0d0; --acc-soft:rgba(59,157,255,.16);
+  --txt:#e6f0ff; --txt-strong:#d6e6ff; --mut:#7d90ab;
+  --line:rgba(160,210,255,.12); --panel:rgba(160,210,255,.04); --panel2:rgba(160,210,255,.075);
+  --k1:#16233a; --k2:#0f1826; --kb:rgba(160,210,255,.12); --kt:#d6e6ff;
+  --k3:#060b13; --k5:rgba(180,220,255,.08); --ksub:#7d90ab;
+  --note-l1:42%; --note-l2:25%; --note-glow:.6;
+  --bub-bg:rgba(12,22,38,.95); --modal1:rgba(20,34,56,.98); --modal2:rgba(11,19,32,.98);
+  --field:rgba(0,0,0,.35); --chip:rgba(160,210,255,.09);
+  --item:rgba(160,210,255,.045); --item2:rgba(160,210,255,.09);
+  --grad2:#8ac6ff;
+  --surface:#13213a; --neu-l:#1c2f4e; --neu-d:#080f1c;
+}
+body[data-theme="graphite"]{
+  --bg:#131417; --glow1:#1e2126; --glow2:#191c21; --glow3:#22252b;
+  --grid:rgba(255,255,255,.03); --blob-op:.5; --bl1:#2c3138; --bl2:#23282e; --bl3:#343a42;
+  --acc:#a7b0bf; --acc2:#7d8797; --acc-soft:rgba(167,176,191,.16); --on-acc:#101114;
+  --txt:#e6e8ec; --txt-strong:#d5d8de; --mut:#868b95;
+  --k1:#26292f; --k2:#1b1e23; --kb:rgba(255,255,255,.08); --kt:#dfe2e8;
+  --k3:#101216; --k5:rgba(255,255,255,.06); --ksub:#868b95;
+  --note-l1:42%; --note-l2:27%; --note-glow:.5;
+  --bub-bg:rgba(24,26,31,.96); --modal1:rgba(32,35,41,.98); --modal2:rgba(22,24,28,.98);
+  --grad1:#ffffff; --grad2:#b9c2d0;
+  --surface:#1d2025; --neu-l:#282c33; --neu-d:#121418;
+}
+body[data-theme="paper"]{
+  --bg:#f2f0ec; --glow1:#ffe6cf; --glow2:#d8e8ff; --glow3:#efdcff;
+  --grid:rgba(20,20,40,.05); --blob-op:.55; --bl1:#ffcfa1; --bl2:#a9d3ff; --bl3:#e0caff;
+  --panel:rgba(255,255,255,.62); --panel2:rgba(255,255,255,.92);
+  --line:rgba(20,20,40,.13); --inset:rgba(255,255,255,.8);
+  --txt:#23232e; --txt-strong:#2c2c38; --mut:#6d6d80;
+  --acc:#5b4bd6; --acc2:#0e8fa8; --danger:#d9365a; --acc-soft:rgba(91,75,214,.14);
+  --shadow-c:rgba(40,40,70,.28); --scrim:rgba(30,30,45,.4);
+  --k1:#ffffff; --k2:#e8e6e1; --kb:rgba(20,20,40,.15); --kt:#33333f;
+  --k3:#cbc5bc; --k4:rgba(30,30,50,.22); --k5:rgba(255,255,255,.95); --ksub:#8a8798;
+  --k-hover:rgba(20,20,40,.28); --k-hov-sh:rgba(30,30,50,.28);
+  --note-l1:70%; --note-l2:55%; --note-shadow-l:40%; --note-txt:#1a1a24;
+  --note-glow:.3; --note-hi:.4; --note-ts:0 1px 0 rgba(255,255,255,.4);
+  --note-sub:26%; --note-bord-l:44%;
+  --bub-bg:rgba(255,255,255,.97); --bub-txt:#22222c;
+  --modal1:rgba(255,255,255,.98); --modal2:rgba(247,246,251,.98);
+  --field:rgba(255,255,255,.9); --field2:#fff; --chip:rgba(20,20,40,.07);
+  --item:rgba(255,255,255,.62); --item2:rgba(255,255,255,.95);
+  --grad1:#2b2b3a; --grad2:#6d5fe0;
+  --surface:#eceae5; --neu-l:#ffffff; --neu-d:#cdcbc5;
+}
+body[data-theme="lavender"]{
+  --bg:#f5f2ff; --glow1:#e2d5ff; --glow2:#d3ecff; --glow3:#ffdff2;
+  --grid:rgba(70,40,150,.055); --blob-op:.55; --bl1:#c9b3ff; --bl2:#a9d8ff; --bl3:#ffc4e6;
+  --panel:rgba(255,255,255,.6); --panel2:rgba(255,255,255,.9);
+  --line:rgba(90,60,180,.16); --inset:rgba(255,255,255,.85);
+  --txt:#2b2440; --txt-strong:#3a3352; --mut:#7a7195;
+  --acc:#8b5cf6; --acc2:#0891b2; --danger:#e0356b; --acc-soft:rgba(139,92,246,.15);
+  --shadow-c:rgba(80,50,140,.26); --scrim:rgba(45,30,70,.38);
+  --k1:#ffffff; --k2:#ece6ff; --kb:rgba(90,60,180,.17); --kt:#3a3352;
+  --k3:#d6ccf0; --k4:rgba(80,50,140,.2); --k5:rgba(255,255,255,.95); --ksub:#8c83a8;
+  --k-hover:rgba(90,60,180,.3); --k-hov-sh:rgba(80,50,140,.26);
+  --note-l1:72%; --note-l2:58%; --note-shadow-l:42%; --note-txt:#221a3a;
+  --note-glow:.32; --note-hi:.45; --note-ts:0 1px 0 rgba(255,255,255,.45);
+  --note-sub:28%; --note-bord-l:46%;
+  --bub-bg:rgba(255,255,255,.97); --bub-txt:#2b2440;
+  --modal1:rgba(255,255,255,.98); --modal2:rgba(248,244,255,.98);
+  --field:rgba(255,255,255,.9); --field2:#fff; --chip:rgba(90,60,180,.08);
+  --item:rgba(255,255,255,.6); --item2:rgba(255,255,255,.95);
+  --grad1:#33294d; --grad2:#a78bfa;
+  --surface:#ebe6fc; --neu-l:#ffffff; --neu-d:#cec8e8;
+}
+
+/* ============ СТИЛЬ 1: GLASSMORPHISM ============ */
+body[data-style="glass"]{
+  --card-bg:var(--panel); --card-border-c:var(--line); --card-blur:blur(14px);
+  --card-shadow:0 30px 60px -30px var(--shadow-c); --card-inset:inset 0 1px 0 var(--inset); --card-radius:22px;
+  --key-bg:linear-gradient(180deg,var(--k1),var(--k2)); --key-border-c:var(--kb); --key-radius:10px;
+  --key-shadow:0 3px 0 var(--k3),0 6px 14px -8px var(--k4),inset 0 1px 0 var(--k5);
+  --key-hov-shadow:0 5px 0 var(--k3),0 14px 26px -14px var(--k-hov-sh),inset 0 1px 0 var(--k5);
+  --key-press-shadow:0 1px 0 var(--k3),inset 0 2px 6px rgba(0,0,0,.35);
+  --key-hov-bord:var(--k-hover); --key-hi-show:1;
+  --btn-bg:var(--panel); --btn-border-c:var(--line); --btn-shadow:none; --btn-radius:12px;
+  --btn-hov-bg:var(--panel2); --btn-hov-bord:var(--k-hover); --btn-hov-shadow:none;
+  --btn-primary-bg:linear-gradient(135deg,var(--acc),var(--acc2)); --btn-primary-bord:transparent;
+  --btn-primary-shadow:0 8px 24px -10px var(--acc);
+  --field-bg:var(--field); --field-focus-bg:var(--field2); --field-border-c:var(--line);
+  --field-shadow:none; --field-radius:14px;
+  --pop-bg:var(--bub-bg); --pop-blur:blur(18px); --pop-border-a:.5;
+  --pop-shadow:0 24px 50px -18px var(--shadow-c), inset 0 1px 0 var(--inset);
+  --modal-bg:linear-gradient(180deg,var(--modal1),var(--modal2)); --modal-shadow:0 40px 90px -30px var(--shadow-c);
+  --item-bg:var(--item); --item-hov-bg:var(--item2); --item-shadow:none; --item-radius:12px;
+  --cap-radius:8px; --cap-empty-bg:linear-gradient(180deg,var(--k1),var(--k2));
+  --cap-empty-bord:var(--kb); --cap-empty-shadow:none;
+  --track-bg:var(--chip); --track-shadow:none;
+  --seg-bg:var(--chip); --seg-shadow:inset 0 1px 4px rgba(0,0,0,.28);
+  --seg-on-bg:linear-gradient(135deg,var(--acc),var(--acc2)); --seg-on-color:var(--on-acc);
+  --seg-on-shadow:0 6px 16px -8px var(--acc);
+  --logo-shadow:0 10px 30px -8px var(--acc), inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* ============ СТИЛЬ 2: NEUMORPHISM ============ */
+body[data-style="neumorph"]{
+  --bg:var(--surface);
+  --glow1:color-mix(in srgb,var(--surface) 93%,#fff);
+  --glow2:color-mix(in srgb,var(--surface) 90%,var(--acc));
+  --glow3:color-mix(in srgb,var(--surface) 93%,#000);
+  --grid:transparent; --blob-op:.14;
+  --card-bg:var(--surface); --card-border-c:transparent; --card-blur:none;
+  --card-shadow:14px 14px 30px var(--neu-d),-14px -14px 30px var(--neu-l);
+  --card-inset:0 0 0 transparent; --card-radius:30px;
+  --key-bg:var(--surface); --key-border-c:transparent; --key-radius:15px;
+  --key-shadow:5px 5px 11px var(--neu-d),-5px -5px 11px var(--neu-l);
+  --key-hov-shadow:8px 8px 17px var(--neu-d),-8px -8px 17px var(--neu-l);
+  --key-press-shadow:inset 4px 4px 9px var(--neu-d),inset -4px -4px 9px var(--neu-l);
+  --key-hov-bord:transparent; --key-hi-show:0;
+  --btn-bg:var(--surface); --btn-border-c:transparent;
+  --btn-shadow:4px 4px 9px var(--neu-d),-4px -4px 9px var(--neu-l); --btn-radius:14px;
+  --btn-hov-bg:var(--surface); --btn-hov-bord:transparent;
+  --btn-hov-shadow:6px 6px 13px var(--neu-d),-6px -6px 13px var(--neu-l);
+  --btn-primary-bg:linear-gradient(135deg,var(--acc),var(--acc2)); --btn-primary-bord:transparent;
+  --btn-primary-shadow:5px 5px 13px var(--neu-d),-5px -5px 13px var(--neu-l);
+  --field-bg:var(--surface); --field-focus-bg:var(--surface); --field-border-c:transparent;
+  --field-shadow:inset 3px 3px 8px var(--neu-d),inset -3px -3px 8px var(--neu-l); --field-radius:16px;
+  --pop-bg:var(--surface); --pop-blur:none; --pop-border-a:.3;
+  --pop-shadow:16px 16px 36px var(--neu-d),-16px -16px 36px var(--neu-l);
+  --modal-bg:var(--surface); --modal-shadow:22px 22px 55px var(--neu-d),-22px -22px 55px var(--neu-l);
+  --item-bg:var(--surface); --item-hov-bg:var(--surface);
+  --item-shadow:4px 4px 9px var(--neu-d),-4px -4px 9px var(--neu-l); --item-radius:16px;
+  --cap-radius:10px; --cap-empty-bg:var(--surface); --cap-empty-bord:transparent;
+  --cap-empty-shadow:2px 2px 5px var(--neu-d),-2px -2px 5px var(--neu-l);
+  --track-bg:var(--surface); --track-shadow:inset 2px 2px 5px var(--neu-d),inset -2px -2px 5px var(--neu-l);
+  --seg-bg:var(--surface); --seg-shadow:inset 3px 3px 8px var(--neu-d),inset -3px -3px 8px var(--neu-l);
+  --seg-on-bg:var(--surface); --seg-on-color:var(--acc);
+  --seg-on-shadow:4px 4px 9px var(--neu-d),-4px -4px 9px var(--neu-l);
+  --logo-shadow:8px 8px 18px var(--neu-d),-8px -8px 18px var(--neu-l);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  --scroll-thumb:color-mix(in srgb,var(--txt) 24%,transparent);
+  --scroll-thumb-h:color-mix(in srgb,var(--txt) 46%,transparent);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;transition:background-color .35s ease,color .35s ease;
+}
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;transition:.35s;
+  background:
+  radial-gradient(1200px 700px at 15% -10%, var(--glow1) 0%, transparent 60%),
+  radial-gradient(900px 600px at 95% 10%, var(--glow2) 0%, transparent 55%),
+  radial-gradient(1000px 800px at 50% 120%, var(--glow3) 0%, transparent 60%),
+  var(--bg);}
+.bg::after{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 78%);
+  mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 78%);}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--blob-op);animation:float 20s ease-in-out infinite;transition:opacity .35s,background .35s}
+.b1{width:420px;height:420px;background:var(--bl1);top:-120px;left:-80px}
+.b2{width:380px;height:380px;background:var(--bl2);top:20%;right:-120px;animation-delay:-6s}
+.b3{width:460px;height:460px;background:var(--bl3);bottom:-180px;left:35%;animation-delay:-12s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.08)}66%{transform:translate(-30px,25px) scale(.95)}}
+
+/* ---------- скроллбары ---------- */
+.thin-scroll{scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
+.thin-scroll::-webkit-scrollbar{height:7px;width:7px}
+.thin-scroll::-webkit-scrollbar-track{background:transparent}
+.thin-scroll::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:8px}
+.thin-scroll::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-h)}
+.thin-scroll::-webkit-scrollbar-corner{background:transparent}
+
+/* ---------- header: на всю ширину ---------- */
+.topbar{max-width:none;margin:0 auto;padding:clamp(16px,1.6vw,26px) var(--pad) 12px;
+  display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:24px;
+  background:linear-gradient(140deg,var(--acc),var(--acc2));color:var(--on-acc);
+  box-shadow:var(--logo-shadow);transition:.35s}
+.brand h1{margin:0;font-size:clamp(19px,2.3vw,26px);font-weight:800;letter-spacing:-.02em}
+.brand p{margin:3px 0 0;font-size:13px;color:var(--mut)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:relative}
+.search{position:relative;display:flex;align-items:center}
+.search svg{position:absolute;left:12px;opacity:.5;pointer-events:none;z-index:2}
+.search input{
+  background:var(--field-bg);border:1px solid var(--field-border-c);border-radius:var(--field-radius);color:var(--txt);
+  box-shadow:var(--field-shadow);
+  padding:11px 14px 11px 38px;font:inherit;font-size:13.5px;width:clamp(180px,17vw,280px);outline:none;transition:.2s}
+.search input:focus{border-color:var(--acc);box-shadow:var(--field-shadow),0 0 0 4px var(--acc-soft);background:var(--field-focus-bg)}
+.search input::placeholder{color:var(--mut)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--btn-bg);border:1px solid var(--btn-border-c);
+  color:var(--txt);padding:10px 15px;border-radius:var(--btn-radius);font:inherit;font-size:13px;font-weight:600;
+  cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:var(--btn-shadow)}
+.btn:hover{background:var(--btn-hov-bg);border-color:var(--btn-hov-bord);box-shadow:var(--btn-hov-shadow);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.primary{background:var(--btn-primary-bg);border-color:var(--btn-primary-bord);color:var(--on-acc);box-shadow:var(--btn-primary-shadow)}
+.btn.primary:hover{filter:brightness(1.1);box-shadow:var(--btn-primary-shadow)}
+.btn.danger{background:color-mix(in srgb,var(--danger) 14%,var(--btn-bg));border-color:color-mix(in srgb,var(--danger) 38%,transparent);color:var(--danger)}
+.btn.danger:hover{background:color-mix(in srgb,var(--danger) 24%,var(--btn-bg))}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn.ghost:hover{background:var(--btn-hov-bg)}
+.btn.wide{width:100%;margin-top:12px;flex:0 0 auto}
+.btn:disabled{opacity:.35;pointer-events:none}
+.switch{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);border:1px solid var(--btn-border-c);
+  box-shadow:var(--btn-shadow);
+  padding:8px 14px 8px 11px;border-radius:var(--btn-radius);cursor:pointer;font-size:13px;font-weight:600;user-select:none;transition:.2s}
+.switch:hover{background:var(--btn-hov-bg)}
+.track{width:38px;height:21px;border-radius:20px;background:var(--track-bg);box-shadow:var(--track-shadow);position:relative;transition:.25s;flex:0 0 auto}
+.track::after{content:'';position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:var(--knob);transition:.25s cubic-bezier(.4,1.6,.5,1);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.switch input{display:none}
+.switch input:checked + .track{background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:none}
+.switch input:checked + .track::after{transform:translateX(17px)}
+
+/* ---------- палитра ---------- */
+.theme-pop{position:absolute;top:calc(100% + 12px);right:0;z-index:55;width:308px;
+  background:var(--pop-bg);backdrop-filter:var(--pop-blur);border:1px solid var(--line);border-radius:20px;
+  padding:14px;box-shadow:var(--pop-shadow);
+  opacity:0;visibility:hidden;transform:translateY(-8px) scale(.97);transform-origin:100% 0;
+  transition:.22s cubic-bezier(.3,1.2,.5,1)}
+.theme-pop.show{opacity:1;visibility:visible;transform:none}
+.theme-pop h3{margin:2px 4px 10px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.seg{display:flex;gap:4px;background:var(--seg-bg);border-radius:14px;padding:4px;box-shadow:var(--seg-shadow)}
+.seg-b{flex:1;background:none;border:none;color:var(--mut);font:inherit;font-size:12.5px;font-weight:600;
+  padding:8px 6px;border-radius:11px;cursor:pointer;transition:.2s}
+.seg-b:hover{color:var(--txt)}
+.seg-b.on{background:var(--seg-on-bg);color:var(--seg-on-color);box-shadow:var(--seg-on-shadow)}
+.themes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.th{display:flex;align-items:center;gap:9px;background:var(--item-bg);border:1px solid var(--line);border-radius:12px;
+  padding:9px 10px;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;color:var(--txt);transition:.18s;text-align:left;box-shadow:var(--item-shadow)}
+.th:hover{background:var(--item-hov-bg);transform:translateY(-1px)}
+.th.on{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft),var(--item-shadow)}
+.dots{display:flex;flex:0 0 auto}
+.dots i{width:11px;height:11px;border-radius:50%;margin-right:-4px;border:1.5px solid rgba(0,0,0,.25);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.th .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.th .ck{opacity:0;color:var(--acc);font-size:12px}
+.th.on .ck{opacity:1}
+.pop-sep{height:1px;background:var(--line);margin:13px 2px}
+.pop-row{display:flex;align-items:center;gap:10px;padding:2px 4px;font-size:12.5px;font-weight:600}
+.pop-row .hint{font-size:11px;color:var(--mut);font-weight:400;margin-top:2px;line-height:1.4}
+.pop-row .switch{background:none;border:none;box-shadow:none;padding:0}
+.pop-row .switch:hover{background:none}
+.pop-row .track{width:34px;height:19px}
+.pop-row .track::after{width:14px;height:14px}
+.pop-row input:checked + .track::after{transform:translateX(15px)}
+.pop-row label{flex:1;cursor:pointer}
+
+/* ---------- layout: блоки занимают всё доступное место ---------- */
+.wrap{max-width:none;margin:0 auto;padding:6px var(--pad) clamp(18px,2vw,32px);
+  display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,23vw,440px);gap:clamp(16px,1.5vw,24px);align-items:stretch}
+.card{background:var(--card-bg);border:1px solid var(--card-border-c);border-radius:var(--card-radius);
+  backdrop-filter:var(--card-blur);box-shadow:var(--card-shadow),var(--card-inset);
+  transition:background .35s,border-color .35s,box-shadow .35s,border-radius .35s}
+
+.kb-card{padding:clamp(14px,1.7vw,28px);display:flex;flex-direction:column;min-height:calc(100vh - var(--chrome))}
+.kb-scroll{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:safe center;
+  container-type:inline-size;
+  overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;padding:6px 0 12px}
+
+.kb{width:100%;min-width:640px;display:flex;flex-direction:column;gap:var(--gap)}
+.row{display:flex;gap:var(--gap)}
+
+/* компактная: масштаб от ширины блока, с ограничением сверху и снизу */
+.kb.compact{
+  --ku:clamp(30px,5.8cqw,56px);
+  --kh:calc(var(--ku) * 1.15);
+  --gap:calc(var(--ku) * .16);
+}
+.kb.compact .key .main{font-size:calc(var(--ku) * .34)}
+.kb.compact .key .sub{font-size:calc(var(--ku) * .235)}
+.kb.compact .key.mod .main{font-size:calc(var(--ku) * .255)}
+
+/* ---------- полноразмерная раскладка ---------- */
+.kb.kb-full{
+  --ku:clamp(22px,3.78cqw,46px);
+  --kh:calc(var(--ku) * 1.16);
+  --gap:calc(var(--ku) * .16);
+  width:max-content;min-width:0;gap:0}
+.kb-full .kb-blocks{display:flex;gap:calc(var(--ku) * .6);align-items:flex-start}
+.kb-full .blk{display:flex;flex-direction:column;gap:var(--gap)}
+.kb-full .row{height:var(--kh)}
+.kb-full .row .key{flex:0 0 auto;width:calc(var(--ku) * var(--w))}
+.kb-full .sp{flex:0 0 auto;width:calc(var(--ku) * var(--w));height:100%}
+.kb-full .key .main{font-size:calc(var(--ku) * .38)}
+.kb-full .key .sub{font-size:calc(var(--ku) * .25)}
+.kb-full .key.mod .main{font-size:clamp(7px,calc(var(--ku) * .25),11px);padding:0 1px;overflow:hidden}
+.kb-full .key.mod .ico{display:none}
+.kb-full .grid-blk{display:grid;gap:var(--gap);grid-template-columns:repeat(4,var(--ku));grid-auto-rows:var(--kh)}
+.kb-full .grid-blk .key{width:auto;height:auto}
+.kb-full .blk-nav .row{grid-template-columns:none}
+.kb-full .blk-num .frow{width:100%}
+.kb-full .blk-num .frow .sp{width:100%}
+
+/* ---------- keys ---------- */
+.key{
+  --w:1;--h:258;
+  position:relative;flex:var(--w) 1 0;min-width:0;height:var(--kh);
+  border-radius:var(--key-radius);border:1px solid var(--key-border-c);
+  background:var(--key-bg);box-shadow:var(--key-shadow);
+  color:var(--kt);font-family:inherit;cursor:pointer;padding:2px 4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  transition:transform .09s ease, background .3s, box-shadow .25s, border-color .3s, color .3s, opacity .25s;
+  overflow:hidden;
+}
+.key .main{font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;font-size:clamp(11px,1.05vw,15px);line-height:1.05;letter-spacing:.01em}
+.key .sub{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(7.5px,.68vw,10px);line-height:1;color:var(--ksub);transition:.3s}
+.key.mod .main{font-family:'Inter',sans-serif;font-size:clamp(8px,.78vw,11.5px);font-weight:600;text-transform:lowercase;letter-spacing:.02em;display:flex;align-items:center;gap:4px}
+.key.mod .ico{font-size:1.25em;opacity:.75}
+.key:hover{transform:translateY(-2px);border-color:var(--key-hov-bord);box-shadow:var(--key-hov-shadow)}
+.key:active,.key.press{transform:translateY(1px) scale(.99);box-shadow:var(--key-press-shadow)}
+.key:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+
+.key.note{color:var(--note-txt);text-shadow:var(--note-ts);border-color:hsl(var(--h) 85% var(--note-bord-l) / .6)}
+body[data-style="glass"] .key.note{
+  background:linear-gradient(180deg,hsl(var(--h) 72% var(--note-l1)),hsl(var(--h) 68% var(--note-l2)));
+  box-shadow:0 3px 0 hsl(var(--h) 70% var(--note-shadow-l)),0 0 22px -4px hsl(var(--h) 90% 55% / var(--note-glow)),inset 0 1px 0 hsl(var(--h) 100% 82% / var(--note-hi))}
+body[data-style="glass"] .key.note:hover{
+  box-shadow:0 5px 0 hsl(var(--h) 70% var(--note-shadow-l)),0 0 34px -2px hsl(var(--h) 95% 58% / calc(var(--note-glow) + .2)),inset 0 1px 0 hsl(var(--h) 100% 85% / var(--note-hi))}
+body[data-style="glass"] .key.note:active,body[data-style="glass"] .key.note.press{
+  box-shadow:0 1px 0 hsl(var(--h) 70% var(--note-shadow-l)),inset 0 2px 7px hsl(var(--h) 80% 12% / .5)}
+body[data-style="neumorph"] .key.note{
+  background:linear-gradient(145deg,hsl(var(--h) 62% calc(var(--note-l1) + 9%)),hsl(var(--h) 58% var(--note-l2)));
+  box-shadow:5px 5px 12px var(--neu-d),-5px -5px 12px var(--neu-l),0 0 20px -6px hsl(var(--h) 90% 55% / calc(var(--note-glow) + .25))}
+body[data-style="neumorph"] .key.note:hover{
+  box-shadow:8px 8px 18px var(--neu-d),-8px -8px 18px var(--neu-l),0 0 28px -6px hsl(var(--h) 95% 58% / calc(var(--note-glow) + .4))}
+body[data-style="neumorph"] .key.note:active,body[data-style="neumorph"] .key.note.press{
+  box-shadow:inset 4px 4px 9px hsl(var(--h) 70% 12% / .55),inset -4px -4px 9px hsl(var(--h) 90% 80% / .18)}
+.key.note .sub{color:hsl(var(--h) 90% var(--note-sub) / .85)}
+.key.note::before{content:'';position:absolute;inset:0;opacity:var(--key-hi-show);background:
+  radial-gradient(120% 80% at 50% -20%, hsl(var(--h) 100% 82% / var(--note-hi)), transparent 60%);pointer-events:none;transition:opacity .3s}
+.dot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;
+  background:hsl(var(--h) 95% 70%);box-shadow:0 0 9px 1px hsl(var(--h) 95% 62%);
+  opacity:0;transform:scale(0);transition:.3s cubic-bezier(.3,1.6,.5,1)}
+.key.note .dot{opacity:1;transform:scale(1)}
+.key.dim{opacity:.22;filter:grayscale(.7)}
+.key.hit{animation:hit .9s ease}
+@keyframes hit{0%,100%{box-shadow:var(--key-shadow)}30%{box-shadow:0 0 0 3px var(--acc2),0 0 30px -2px var(--acc2)}}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--mut);flex:0 0 auto}
+.legend b{color:var(--txt-strong);font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.kbd{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--chip);border:1px solid var(--line);
+  border-radius:5px;padding:1px 6px;color:var(--txt)}
+
+/* ---------- sidebar: растягивается на всю высоту ---------- */
+.side{align-self:stretch;display:flex;flex-direction:column;gap:clamp(14px,1.2vw,18px);min-height:0}
+.side .card{padding:18px;display:flex;flex-direction:column;min-height:0}
+.side .card.card-keys{flex:1 1 56%}
+.side .card.card-gen{flex:1 1 44%}
+.side h2{margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.pill{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 7px;border-radius:20px;
+  background:var(--chip);color:var(--txt-strong);font-size:11px;font-weight:700;letter-spacing:0}
+.stats{display:flex;gap:12px;margin-bottom:14px;flex:0 0 auto}
+.stat{flex:1;background:var(--item-bg);border:1px solid var(--line);border-radius:var(--item-radius);padding:11px 12px;box-shadow:var(--item-shadow)}
+.stat .n{font-size:21px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--grad1),var(--grad2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .l{font-size:11px;color:var(--mut);margin-top:2px}
+.bar{height:6px;border-radius:6px;background:var(--chip);overflow:hidden;margin-bottom:16px;box-shadow:var(--track-shadow);flex:0 0 auto}
+.bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .5s cubic-bezier(.3,1,.3,1)}
+.list{flex:1 1 0;min-height:70px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;padding-right:4px;
+  scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
+.list::-webkit-scrollbar{width:6px}
+.list::-webkit-scrollbar-track{background:transparent}
+.list::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px}
+.list .empty-state{margin:auto 0}
+.side-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;flex:0 0 auto}
+.side-actions .btn{flex:1;justify-content:center;padding:9px 10px;font-size:12px}
+.item{display:flex;gap:10px;align-items:flex-start;background:var(--item-bg);border:1px solid var(--line);
+  border-radius:var(--item-radius);padding:9px 10px;cursor:pointer;transition:.18s;position:relative;box-shadow:var(--item-shadow);flex:0 0 auto}
+.item:hover{background:var(--item-hov-bg);border-color:hsl(var(--h) 80% 55% / .55);transform:translateX(2px)}
+.cap{--h:258;flex:0 0 auto;min-width:30px;height:30px;padding:0 7px;border-radius:var(--cap-radius);display:grid;place-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--note-txt);
+  border:1px solid hsl(var(--h) 85% var(--note-bord-l) / .55);text-shadow:var(--note-ts);transition:.3s}
+body[data-style="glass"] .cap{
+  background:linear-gradient(180deg,hsl(var(--h) 72% var(--note-l1)),hsl(var(--h) 68% var(--note-l2)));
+  box-shadow:0 0 14px -4px hsl(var(--h) 90% 55% / var(--note-glow)), inset 0 1px 0 hsl(var(--h) 100% 85% / var(--note-hi))}
+body[data-style="neumorph"] .cap{
+  background:linear-gradient(145deg,hsl(var(--h) 62% calc(var(--note-l1) + 9%)),hsl(var(--h) 58% var(--note-l2)));
+  box-shadow:3px 3px 7px var(--neu-d),-3px -3px 7px var(--neu-l),0 0 14px -5px hsl(var(--h) 90% 55% / var(--note-glow))}
+.cap.empty{background:var(--cap-empty-bg);border-color:var(--cap-empty-bord);color:var(--ksub);box-shadow:var(--cap-empty-shadow);text-shadow:none}
+.item .tx{flex:1;min-width:0;font-size:12.5px;line-height:1.45;color:var(--txt-strong);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.item .meta{display:block;font-size:10.5px;color:var(--mut);margin-top:3px}
+.del{opacity:0;background:none;border:none;color:var(--mut);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:6px;transition:.15s;flex:0 0 auto}
+.item:hover .del,.gitem:hover .del{opacity:1}
+.del:hover{color:var(--danger);background:var(--acc-soft)}
+.empty-state{text-align:center;padding:26px 12px;color:var(--mut);font-size:13px;line-height:1.6}
+.empty-state.sm{padding:18px 10px;font-size:12.5px}
+.empty-state div:first-child{font-size:28px;margin-bottom:8px;opacity:.6}
+
+/* ---------- общие заметки ---------- */
+.gitem{position:relative;background:var(--item-bg);border:1px solid var(--line);border-left:3px solid var(--acc);
+  border-radius:var(--item-radius);padding:10px 32px 10px 12px;cursor:pointer;transition:.18s;box-shadow:var(--item-shadow);flex:0 0 auto}
+.gitem:hover{background:var(--item-hov-bg);transform:translateX(2px);border-left-color:var(--acc2)}
+.gitem .tx{font-size:12.5px;line-height:1.5;color:var(--txt-strong);white-space:pre-wrap;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.gitem .meta{font-size:10.5px;color:var(--mut);margin-top:5px}
+.gitem .del{position:absolute;top:6px;right:6px}
+
+/* ---------- bubble ---------- */
+.bubble{
+  position:fixed;z-index:60;width:290px;max-width:calc(100vw - 20px);
+  background:var(--pop-bg);backdrop-filter:var(--pop-blur);
+  border:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a));border-radius:18px;padding:13px 14px 11px;
+  box-shadow:var(--pop-shadow), 0 0 34px -14px hsl(var(--h,258) 90% 55% / .8);
+  opacity:0;visibility:hidden;transform:translateY(8px) scale(.95);transform-origin:50% 100%;
+  transition:opacity .18s ease, transform .22s cubic-bezier(.3,1.4,.5,1), visibility .18s;
+  pointer-events:none}
+.bubble.show{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+.bubble.below{transform-origin:50% 0}
+.b-head{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.b-head .cap{min-width:26px;height:26px;font-size:11px}
+.b-meta{font-size:10.5px;color:var(--mut);margin-left:auto;text-align:right;line-height:1.5}
+.b-text{font-size:13.5px;line-height:1.55;color:var(--bub-txt);white-space:pre-wrap;word-break:break-word;
+  max-height:190px;overflow-y:auto;cursor:pointer;border-radius:10px;padding:6px 8px;margin:0 -8px;transition:.18s;
+  border:1px dashed transparent}
+.b-text:hover{background:hsl(var(--h,258) 70% 55% / .16);border-color:hsl(var(--h,258) 80% 60% / .5)}
+.b-text::-webkit-scrollbar{width:5px}
+.b-text::-webkit-scrollbar-thumb{background:var(--chip);border-radius:5px}
+.b-hint{display:flex;align-items:center;gap:5px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+  font-size:10.5px;color:var(--mut)}
+.arrow{position:absolute;left:var(--ax,50%);bottom:-7px;width:13px;height:13px;margin-left:-6.5px;transform:rotate(45deg);
+  background:var(--pop-bg);border-right:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a));border-bottom:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a))}
+.bubble.below .arrow{bottom:auto;top:-7px;border:none;border-left:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a));border-top:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a))}
+
+/* ---------- modal ---------- */
+.backdrop{position:fixed;inset:0;z-index:80;background:var(--scrim);backdrop-filter:blur(7px);
+  display:grid;place-items:center;padding:20px;opacity:0;visibility:hidden;transition:.22s}
+.backdrop.show{opacity:1;visibility:visible}
+.modal{width:min(520px,100%);background:var(--modal-bg);
+  border:1px solid hsl(var(--h,258) 70% 55% / var(--pop-border-a));border-radius:24px;padding:20px;
+  box-shadow:var(--modal-shadow), 0 0 60px -20px hsl(var(--h,258) 90% 55% / .5);
+  transform:translateY(18px) scale(.96);transition:.28s cubic-bezier(.3,1.3,.5,1);
+  max-height:calc(100vh - 40px);overflow-y:auto}
+.backdrop.show .modal{transform:none}
+.m-top{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+.m-top .cap{min-width:44px;height:44px;font-size:16px;border-radius:calc(var(--cap-radius) + 3px)}
+.m-title{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.m-sub{font-size:12px;color:var(--mut);margin-top:2px}
+.icon-btn{margin-left:auto;background:var(--chip);border:1px solid var(--line);color:var(--mut);
+  width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:14px;line-height:1;transition:.18s;flex:0 0 auto}
+.icon-btn:hover{color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,transparent);border-color:color-mix(in srgb,var(--danger) 40%,transparent)}
+.ta{width:100%;min-height:150px;resize:vertical;background:var(--field-bg);border:1px solid var(--field-border-c);
+  border-radius:var(--field-radius);color:var(--txt);font:inherit;font-size:14.5px;line-height:1.6;padding:14px;outline:none;
+  box-shadow:var(--field-shadow);transition:.2s}
+.ta:focus{border-color:hsl(var(--h,258) 80% 60% / .75);box-shadow:var(--field-shadow),0 0 0 4px hsl(var(--h,258) 80% 55% / .18);background:var(--field-focus-bg)}
+.ta::placeholder{color:var(--mut)}
+.m-bottom{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.counter{font-size:11.5px;color:var(--mut);font-family:'JetBrains Mono',monospace}
+.m-btns{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- окно экспорта ---------- */
+.modal.exp{width:min(560px,100%)}
+.exp-field{margin-bottom:13px}
+.exp-field > label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--mut);margin:0 2px 7px}
+.f-row{display:flex;gap:8px;align-items:stretch}
+.inp{width:100%;min-width:0;background:var(--field-bg);border:1px solid var(--field-border-c);border-radius:12px;
+  color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:11px 13px;outline:none;
+  box-shadow:var(--field-shadow);transition:.2s}
+.inp:focus{border-color:var(--acc);box-shadow:var(--field-shadow),0 0 0 4px var(--acc-soft)}
+.dir-box{flex:1;min-width:0;display:flex;align-items:center;gap:9px;background:var(--field-bg);
+  border:1px solid var(--field-border-c);border-radius:12px;padding:0 13px;box-shadow:var(--field-shadow);
+  font-size:12.5px;overflow:hidden;transition:.2s}
+.dir-box .di{opacity:.8;flex:0 0 auto}
+.dir-box .dt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt);font-weight:600}
+.dir-box.empty .dt{color:var(--mut);font-weight:400}
+.exp-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}
+.exp-actions .btn{flex:1 1 auto;padding:11px 14px}
+.exp-hint{font-size:11.5px;color:var(--mut);line-height:1.55;margin:12px 2px 0;display:flex;gap:7px;align-items:flex-start}
+.exp-hint i{font-style:normal;opacity:.85}
+.pv{margin-top:16px;border-top:1px solid var(--line);padding-top:8px}
+.pv-toggle{width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;padding:8px 6px;cursor:pointer;
+  font:inherit;font-size:12px;font-weight:600;color:var(--mut);transition:.18s;border-radius:10px;text-align:left}
+.pv-toggle:hover{color:var(--txt);background:var(--chip)}
+.pv-toggle b{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--txt-strong)}
+.pv-toggle .chev{margin-left:auto;transition:transform .3s;font-size:11px}
+.pv.open .pv-toggle .chev{transform:rotate(180deg)}
+.pv-body{max-height:0;overflow:hidden;transition:max-height .32s ease}
+.pv.open .pv-body{max-height:172px}
+.preview{margin:8px 0 0;background:var(--field-bg);border:1px solid var(--field-border-c);border-radius:var(--field-radius);
+  box-shadow:var(--field-shadow);padding:12px 14px;height:160px;overflow:auto;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.6;color:var(--txt-strong);
+  white-space:pre;user-select:text;tab-size:2;
+  scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
+.preview::-webkit-scrollbar{width:8px;height:8px}
+.preview::-webkit-scrollbar-track{background:transparent}
+.preview::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:8px}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:28px;z-index:100;transform:translate(-50%,26px);
+  display:flex;align-items:center;gap:14px;background:var(--pop-bg);backdrop-filter:var(--pop-blur);
+  border:1px solid var(--line);color:var(--txt);
+  border-radius:16px;padding:12px 14px 12px 18px;font-size:13.5px;max-width:calc(100vw - 24px);
+  box-shadow:var(--pop-shadow);opacity:0;visibility:hidden;transition:.28s cubic-bezier(.3,1.2,.5,1)}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.toast .undo{background:none;border:none;color:var(--acc2);font:inherit;font-weight:700;font-size:13px;cursor:pointer;padding:4px 8px;border-radius:8px;white-space:nowrap}
+.toast .undo:hover{background:var(--acc-soft)}
+
+@media (max-width:1080px){
+  .wrap{grid-template-columns:minmax(0,1fr)}
+  .kb-card{min-height:0}
+  .side{min-height:0}
+  .side .card.card-keys,.side .card.card-gen{flex:0 0 auto}
+  .list{flex:0 0 auto;max-height:320px;min-height:0}
+}
+@media (max-width:620px){
+  .wrap{padding:6px 14px 28px}
+  .topbar{padding:16px 14px 8px}
+  .search input{width:100%}
+  .search{flex:1}
+  .controls{width:100%}
+  .theme-pop{left:0;right:0;width:auto}
+  .m-btns{width:100%;margin-left:0}
+  .m-btns .btn{flex:1;justify-content:center}
+  .exp-actions .btn{flex:1 1 100%}
+}
+</style>
+</head>
+<body data-theme="night" data-style="glass">
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">⌨</div>
+    <div>
+      <h1>Клавиатурные заметки</h1>
+      <p>Каждая клавиша хранит свою мысль</p>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+      <input id="search" type="text" placeholder="Поиск по заметкам…" autocomplete="off">
+    </div>
+    <button class="btn" id="kbBtn" title="Компактная или полноразмерная клавиатура (с F-рядом, стрелками и цифровым блоком)">⌨ <span id="kbLbl">Компактная</span></button>
+    <button class="btn" id="layoutBtn" title="Переключить раскладку">🔤 <span id="layoutLbl">RU</span></button>
+    <button class="btn" id="themeBtn" title="Стиль и цветовая схема" aria-expanded="false">🎨 <span id="themeLbl">Ночь</span></button>
+    <label class="switch" title="Нажатие физической клавиши открывает её заметку">
+      <input type="checkbox" id="captureChk" checked><span class="track"></span>Захват клавиш
+    </label>
+
+    <div class="theme-pop" id="themePop">
+      <h3>Стиль интерфейса</h3>
+      <div class="seg" id="styleSeg">
+        <button type="button" class="seg-b" data-style="glass">Glassmorphism</button>
+        <button type="button" class="seg-b" data-style="neumorph">Neumorphism</button>
+      </div>
+      <h3 style="margin-top:15px">Цветовая схема</h3>
+      <div class="themes" id="themes"></div>
+      <div class="pop-sep"></div>
+      <div class="pop-row">
+        <label class="switch">
+          <input type="checkbox" id="rainbowChk" checked><span class="track"></span>
+        </label>
+        <label for="rainbowChk">
+          Разноцветные клавиши
+          <div class="hint">Выкл. — все заметки в одном цвете схемы</div>
+        </label>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card kb-card">
+    <div class="kb-scroll thin-scroll" id="kbScroll"><div class="kb compact" id="kb"></div></div>
+    <div class="legend">
+      <span><b>Клик</b> по клавише — написать заметку</span>
+      <span><b>Наведение</b> — пузырёк с текстом</span>
+      <span><b>Клик по тексту</b> в пузырьке — изменить или удалить</span>
+      <span><span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> сохранить</span>
+      <span><span class="kbd">Esc</span> отмена</span>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="card card-keys">
+      <h2>Заметки на клавишах <span class="pill" id="stPill">0</span></h2>
+      <div class="stats">
+        <div class="stat"><div class="n" id="stNotes">0</div><div class="l">клавиш занято</div></div>
+        <div class="stat"><div class="n" id="stChars">0</div><div class="l">символов</div></div>
+      </div>
+      <div class="bar"><i id="stBar"></i></div>
+      <div class="list" id="list"></div>
+      <div class="side-actions">
+        <button class="btn" id="exportBtn" title="Экспорт заметок">⬇ Экспорт</button>
+        <button class="btn" id="importBtn" title="Загрузить заметки из файла">⬆ Импорт</button>
+        <button class="btn danger" id="clearBtn">Очистить</button>
+        <input type="file" id="fileIn" accept="application/json" hidden>
+      </div>
+    </div>
+
+    <div class="card card-gen">
+      <h2>Общие заметки <span class="pill" id="genPill">0</span></h2>
+      <div class="list gen-list" id="genList"></div>
+      <button class="btn wide" id="genAdd">＋ Добавить заметку</button>
+    </div>
+  </aside>
+</main>
+
+<div class="bubble" id="bubble">
+  <div class="b-head">
+    <span class="cap" id="bCap">A</span>
+    <span class="b-meta" id="bMeta"></span>
+  </div>
+  <div class="b-text" id="bText" title="Нажмите, чтобы изменить"></div>
+  <div class="b-hint">✎ Нажмите на текст, чтобы изменить или удалить</div>
+  <div class="arrow"></div>
+</div>
+
+<!-- редактор заметки на клавише -->
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="m-top">
+      <span class="cap" id="mCap">A</span>
+      <div>
+        <div class="m-title" id="mTitle">Клавиша</div>
+        <div class="m-sub" id="mSub"></div>
+      </div>
+      <button class="icon-btn" id="mClose" aria-label="Закрыть">✕</button>
+    </div>
+    <textarea class="ta" id="mInput" maxlength="600" placeholder="Введите текст заметки…" spellcheck="true"></textarea>
+    <div class="m-bottom">
+      <span class="counter" id="mCount">0 / 600</span>
+      <div class="m-btns">
+        <button class="btn danger" id="mDelete">Удалить</button>
+        <button class="btn ghost" id="mCancel">Отмена</button>
+        <button class="btn primary" id="mSave">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- редактор общей заметки -->
+<div class="backdrop" id="genBackdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="m-top">
+      <span class="cap" id="gCap">✎</span>
+      <div>
+        <div class="m-title" id="gTitle">Новая общая заметка</div>
+        <div class="m-sub" id="gSub">не привязана к клавише</div>
+      </div>
+      <button class="icon-btn" id="gClose" aria-label="Закрыть">✕</button>
+    </div>
+    <textarea class="ta" id="gInput" maxlength="1200" placeholder="Текст общей заметки…" spellcheck="true"></textarea>
+    <div class="m-bottom">
+      <span class="counter" id="gCount">0 / 1200</span>
+      <div class="m-btns">
+        <button class="btn danger" id="gDelete">Удалить</button>
+        <button class="btn ghost" id="gCancel">Отмена</button>
+        <button class="btn primary" id="gSave">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- окно экспорта -->
+<div class="backdrop" id="expBackdrop">
+  <div class="modal exp" role="dialog" aria-modal="true">
+    <div class="m-top">
+      <span class="cap" id="eCap">⤓</span>
+      <div>
+        <div class="m-title">Экспорт заметок</div>
+        <div class="m-sub" id="eSub"></div>
+      </div>
+      <button class="icon-btn" id="eClose" aria-label="Закрыть">✕</button>
+    </div>
+
+    <div class="exp-field">
+      <label for="eName">Имя файла</label>
+      <input class="inp" id="eName" type="text" spellcheck="false" autocomplete="off" value="keyboard-notes.json">
+    </div>
+
+    <div class="exp-field">
+      <label>Папка</label>
+      <div class="f-row">
+        <div class="dir-box empty" id="eDirBox">
+          <span class="di">📁</span><span class="dt" id="eDir">не выбрана — по умолчанию «Загрузки»</span>
+        </div>
+        <button class="btn" id="eDirBtn" style="flex:0 0 auto">Выбрать…</button>
+      </div>
+    </div>
+
+    <div class="exp-actions">
+      <button class="btn primary" id="eSave">💾 Сохранить</button>
+      <button class="btn" id="eCopy">⧉ Скопировать JSON</button>
+    </div>
+
+    <div class="exp-hint"><i>ℹ</i><span id="eHint"></span></div>
+
+    <div class="pv" id="pv">
+      <button class="pv-toggle" id="pvToggle" aria-expanded="false">
+        <span>Содержимое JSON · <b id="eCount"></b></span><span class="chev">▼</span>
+      </button>
+      <div class="pv-body">
+        <pre class="preview" id="ePreview" tabindex="0"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span><button class="undo" id="toastAct" hidden></button></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= конструкторы клавиш ================= */
+function C(code,num,latSub,cyrSub,w){return {code,num,latSub,cyrSub,w:w||1};}
+function L(code,lat,cyr,w){return {code,lat,cyr,w:w||1};}
+function M(code,label,ico,w,capturable){return {code,label,ico,w:w||1,mod:true,cap:capturable!==false};}
+function S(w){return {spacer:true,w:w||1};}
+
+/* ---- компактная раскладка ---- */
+const COMPACT_ROWS = [
+  [ C('Backquote','`','~','Ё'),
+    C('Digit1','1','!','!'), C('Digit2','2','@','"'), C('Digit3','3','#','№'),
+    C('Digit4','4','$',';'), C('Digit5','5','%','%'), C('Digit6','6','^',':'),
+    C('Digit7','7','&','?'), C('Digit8','8','*','*'), C('Digit9','9','(','('),
+    C('Digit0','0',')',')'),
+    L('Minus','-','-'), L('Equal','=','=','='),
+    M('Backspace','backspace','⌫',2) ],
+
+  [ M('Tab','tab','⇥',1.5),
+    L('KeyQ','Q','Й'), L('KeyW','W','Ц'), L('KeyE','E','У'), L('KeyR','R','К'),
+    L('KeyT','T','Е'), L('KeyY','Y','Н'), L('KeyU','U','Г'), L('KeyI','I','Ш'),
+    L('KeyO','O','Щ'), L('KeyP','P','З'),
+    L('BracketLeft','[','Х'), L('BracketRight',']','Ъ'),
+    L('Backslash','\\','\\',1.5) ],
+
+  [ M('CapsLock','caps lock','⇪',1.75),
+    L('KeyA','A','Ф'), L('KeyS','S','Ы'), L('KeyD','D','В'), L('KeyF','F','А'),
+    L('KeyG','G','П'), L('KeyH','H','Р'), L('KeyJ','J','О'), L('KeyK','K','Л'),
+    L('KeyL','L','Д'), L('Semicolon',';','Ж'), L('Quote',"'",'Э'),
+    M('Enter','enter','⏎',2.25) ],
+
+  [ M('ShiftLeft','shift','⇧',2.25),
+    L('KeyZ','Z','Я'), L('KeyX','X','Ч'), L('KeyC','C','С'), L('KeyV','V','М'),
+    L('KeyB','B','И'), L('KeyN','N','Т'), L('KeyM','M','Ь'),
+    L('Comma',',','Б'), L('Period','.','Ю'), L('Slash','/','.'),
+    M('ShiftRight','shift','⇧',2.75) ],
+
+  [ M('ControlLeft','ctrl','⌃',1.25),
+    M('MetaLeft','win','⊞',1.25),
+    M('AltLeft','alt','⌥',1.25),
+    M('Space','пробел','',6.25),
+    M('AltRight','alt','⌥',1.25),
+    M('Fn','fn','',1.25,false),
+    M('ContextMenu','menu','≡',1.25),
+    M('ControlRight','ctrl','⌃',1.25) ]
+];
+
+/* ---- дополнения полноразмерной раскладки ---- */
+const FROW_MAIN = [
+  M('Escape','esc','',1), S(1),
+  M('F1','F1','',1), M('F2','F2','',1), M('F3','F3','',1), M('F4','F4','',1), S(0.5),
+  M('F5','F5','',1), M('F6','F6','',1), M('F7','F7','',1), M('F8','F8','',1), S(0.5),
+  M('F9','F9','',1), M('F10','F10','',1), M('F11','F11','',1), M('F12','F12','',1)
+];
+const FROW_NAV = [ M('PrintScreen','prt sc','',1), M('ScrollLock','scr lk','',1), M('Pause','pause','',1) ];
+const NAV_ROWS = [
+  [ M('Insert','ins','',1), M('Home','home','',1), M('PageUp','pg up','',1) ],
+  [ M('Delete','del','',1), M('End','end','',1), M('PageDown','pg dn','',1) ],
+  [ S(1), S(1), S(1) ],
+  [ S(1), M('ArrowUp','↑','',1), S(1) ],
+  [ M('ArrowLeft','←','',1), M('ArrowDown','↓','',1), M('ArrowRight','→','',1) ]
+];
+const NUM_GRID = [
+  {k:M('NumLock','num','',1),        c:1,r:1},
+  {k:L('NumpadDivide','/','/'),      c:2,r:1},
+  {k:L('NumpadMultiply','*','*'),    c:3,r:1},
+  {k:L('NumpadSubtract','−','−'),    c:4,r:1},
+  {k:L('Numpad7','7','7'),           c:1,r:2},
+  {k:L('Numpad8','8','8'),           c:2,r:2},
+  {k:L('Numpad9','9','9'),           c:3,r:2},
+  {k:L('NumpadAdd','+','+'),         c:4,r:2,rs:2},
+  {k:L('Numpad4','4','4'),           c:1,r:3},
+  {k:L('Numpad5','5','5'),           c:2,r:3},
+  {k:L('Numpad6','6','6'),           c:3,r:3},
+  {k:L('Numpad1','1','1'),           c:1,r:4},
+  {k:L('Numpad2','2','2'),           c:2,r:4},
+  {k:L('Numpad3','3','3'),           c:3,r:4},
+  {k:M('NumpadEnter','enter','',1),  c:4,r:4,rs:2},
+  {k:L('Numpad0','0','0'),           c:1,r:5,cs:2},
+  {k:L('NumpadDecimal','.','.'),     c:3,r:5}
+];
+
+const KEYS = []
+  .concat(FROW_MAIN.filter(x=>!x.spacer))
+  .concat(FROW_NAV)
+  .concat(COMPACT_ROWS.flat())
+  .concat(NAV_ROWS.flat().filter(x=>!x.spacer))
+  .concat(NUM_GRID.map(x=>x.k));
+
+const BY_CODE = {};
+KEYS.forEach(k=>{ if(k && k.code) BY_CODE[k.code]=k; });
+
+/* ================= 8 цветовых схем ================= */
+const THEMES = [
+  {id:'night',    name:'Ночь',    hue:258, dots:['#7c5cff','#22d3ee','#1b1c26']},
+  {id:'neon',     name:'Неон',    hue:320, dots:['#ff2fb9','#00ffc8','#141a26']},
+  {id:'sunset',   name:'Закат',   hue:24,  dots:['#ff8a4c','#ffd166','#241a1d']},
+  {id:'matrix',   name:'Матрица', hue:142, dots:['#35e07a','#b6ff5c','#0e1a13'], forceMono:true},
+  {id:'ocean',    name:'Океан',   hue:208, dots:['#3b9dff','#35e0d0','#122036']},
+  {id:'graphite', name:'Графит',  hue:215, dots:['#a7b0bf','#7d8797','#1d2025']},
+  {id:'paper',    name:'Бумага',  hue:250, dots:['#5b4bd6','#0e8fa8','#eceae5']},
+  {id:'lavender', name:'Лаванда', hue:264, dots:['#8b5cf6','#06b6d4','#ebe6fc']}
+];
+const THEME_BY_ID={}; THEMES.forEach(t=>THEME_BY_ID[t.id]=t);
+
+/* ================= 2 стиля ================= */
+const STYLES=[{id:'glass',name:'Glassmorphism'},{id:'neumorph',name:'Neumorphism'}];
+const STYLE_BY_ID={}; STYLES.forEach(s=>STYLE_BY_ID[s.id]=s);
+
+/* ================= состояние ================= */
+const LS_NOTES='keynotes.v1.notes', LS_GEN='keynotes.v1.general', LS_LAY='keynotes.v1.layout',
+      LS_CAP='keynotes.v1.capture', LS_THEME='keynotes.v1.theme', LS_RAINBOW='keynotes.v1.rainbow',
+      LS_STYLE='keynotes.v1.style', LS_KB='keynotes.v1.kbmode';
+let notes={};
+try{ notes=JSON.parse(localStorage.getItem(LS_NOTES)||'{}')||{}; }catch(e){ notes={}; }
+let genNotes=[];
+try{ const g=JSON.parse(localStorage.getItem(LS_GEN)||'[]'); if(Array.isArray(g)) genNotes=g.filter(x=>x&&x.text); }catch(e){ genNotes=[]; }
+let layout  = localStorage.getItem(LS_LAY) || 'lat';
+let capture = localStorage.getItem(LS_CAP) !== '0';
+let themeId = localStorage.getItem(LS_THEME); if(!THEME_BY_ID[themeId]) themeId='night';
+let styleId = localStorage.getItem(LS_STYLE); if(!STYLE_BY_ID[styleId]) styleId='glass';
+let rainbow = localStorage.getItem(LS_RAINBOW) !== '0';
+let kbMode  = localStorage.getItem(LS_KB)==='full' ? 'full' : 'compact';
+let query='';
+let curCode=null, bubCode=null, curGen=null, lastFocus=null;
+
+const $=id=>document.getElementById(id);
+const kb=$('kb'), kbScroll=$('kbScroll'), listEl=$('list'), genListEl=$('genList'),
+      bubble=$('bubble'), backdrop=$('backdrop'), genBackdrop=$('genBackdrop'), expBackdrop=$('expBackdrop');
+const els={};
+
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function save(){ lsSet(LS_NOTES,JSON.stringify(notes)); }
+function saveGen(){ lsSet(LS_GEN,JSON.stringify(genNotes)); }
+function hashHue(code){ let h=0; for(let i=0;i<code.length;i++) h=(h*37+code.charCodeAt(i)*7)%360; return h; }
+function themeHue(){ return (THEME_BY_ID[themeId]||THEMES[0]).hue; }
+function hueOf(code){
+  const th=THEME_BY_ID[themeId]||THEMES[0];
+  if(!rainbow||th.forceMono) return th.hue;
+  return hashHue(code);
+}
+function noteOf(code){ const n=notes[code]; return (n&&n.text)?n:null; }
+
+function labels(k){
+  if(k.mod) return {main:k.label||'', ico:k.ico||'', sub:''};
+  if(k.num) return {main:k.num, ico:'', sub:(layout==='lat'?k.latSub:k.cyrSub)||''};
+  const main=k[layout]||'';
+  let sub=k[layout==='lat'?'cyr':'lat']||'';
+  if(sub===main) sub='';
+  return {main,ico:'',sub};
+}
+function keyTitle(k){
+  const l=labels(k);
+  return k.mod ? (l.main||'клавиша') : (l.main+(l.sub?' / '+l.sub:''));
+}
+
+/* ================= построение клавиатуры ================= */
+function el(tag,cls){ const d=document.createElement(tag); if(cls) d.className=cls; return d; }
+function mkKeyEl(k){
+  const b=document.createElement('button');
+  b.type='button'; b.className='key'+(k.mod?' mod':'');
+  b.style.setProperty('--w',k.w);
+  b.dataset.code=k.code;
+  const l=labels(k);
+  const main=el('span','main');
+  if(l.ico){ const i=el('span','ico'); i.textContent=l.ico; main.appendChild(i); }
+  const mt=el('span'); mt.textContent=l.main; main.appendChild(mt);
+  const sub=el('span','sub'); sub.textContent=l.sub;
+  const dot=el('span','dot');
+  b.appendChild(main); if(l.sub) b.appendChild(sub); b.appendChild(dot);
+  b.setAttribute('aria-label','Клавиша '+keyTitle(k));
+  els[k.code]={root:b,main:mt,sub:sub,ico:main.querySelector('.ico')};
+  bindKey(k.code,b);
+  return b;
+}
+function mkSpacer(w){ const d=el('div','sp'); d.style.setProperty('--w',w); return d; }
+function fillRow(rowEl,items){
+  items.forEach(x=>rowEl.appendChild(x.spacer?mkSpacer(x.w):mkKeyEl(x)));
+  return rowEl;
+}
+
+function buildKeyboard(){
+  kb.innerHTML='';
+  Object.keys(els).forEach(c=>delete els[c]);
+  if(kbMode==='full') buildFull(); else buildCompact();
+  refreshKeys();
+}
+function buildCompact(){
+  kb.className='kb compact';
+  COMPACT_ROWS.forEach(row=>{ kb.appendChild(fillRow(el('div','row'),row)); });
+}
+function buildFull(){
+  kb.className='kb kb-full';
+  const blocks=el('div','kb-blocks');
+
+  const bm=el('div','blk blk-main');
+  bm.appendChild(fillRow(el('div','row frow'),FROW_MAIN));
+  COMPACT_ROWS.forEach(row=>bm.appendChild(fillRow(el('div','row'),row)));
+
+  const bn=el('div','blk blk-nav');
+  bn.appendChild(fillRow(el('div','row frow'),FROW_NAV));
+  NAV_ROWS.forEach(row=>bn.appendChild(fillRow(el('div','row'),row)));
+
+  const bnum=el('div','blk blk-num');
+  bnum.appendChild(fillRow(el('div','row frow'),[S(4)]));
+  const g=el('div','grid-blk num-grid');
+  NUM_GRID.forEach(cell=>{
+    const b=mkKeyEl(cell.k);
+    b.style.gridColumn = cell.c + (cell.cs?('/span '+cell.cs):'');
+    b.style.gridRow    = cell.r + (cell.rs?('/span '+cell.rs):'');
+    g.appendChild(b);
+  });
+  bnum.appendChild(g);
+
+  blocks.append(bm,bn,bnum);
+  kb.appendChild(blocks);
+}
+function refreshLabels(){
+  KEYS.forEach(k=>{
+    const e=els[k.code]; if(!e) return;
+    const l=labels(k);
+    e.main.textContent=l.main;
+    if(e.ico) e.ico.textContent=l.ico;
+    if(l.sub){ e.sub.textContent=l.sub; e.sub.style.display=''; }
+    else { e.sub.textContent=''; e.sub.style.display='none'; }
+    e.root.setAttribute('aria-label','Клавиша '+keyTitle(k));
+  });
+  $('layoutLbl').textContent = layout==='lat' ? 'RU' : 'EN';
+}
+function refreshKeys(){
+  KEYS.forEach(k=>{
+    const e=els[k.code]; if(!e) return;
+    e.root.style.setProperty('--h',hueOf(k.code));
+    e.root.classList.toggle('note', !!noteOf(k.code));
+  });
+  applyFilter();
+}
+function applyFilter(){
+  const q=query.trim().toLowerCase();
+  KEYS.forEach(k=>{
+    const e=els[k.code]; if(!e) return;
+    const n=noteOf(k.code);
+    if(!q){ e.root.classList.remove('dim'); return; }
+    e.root.classList.toggle('dim', !(n && n.text.toLowerCase().includes(q)));
+  });
+}
+
+/* ================= время / склонение ================= */
+function ago(ts){
+  const d=Math.floor((Date.now()-ts)/1000);
+  if(d<60) return 'только что';
+  if(d<3600){ const m=Math.floor(d/60); return m+' мин назад'; }
+  if(d<86400){ const h=Math.floor(d/3600); return h+' ч назад'; }
+  if(d<604800){ const dd=Math.floor(d/86400); return dd+' дн назад'; }
+  return new Date(ts).toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+}
+function plural(n,f){
+  const a=Math.abs(n)%100,b=a%10;
+  if(a>10&&a<20) return f[2];
+  if(b>1&&b<5) return f[1];
+  if(b===1) return f[0];
+  return f[2];
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ================= панель: заметки на клавишах ================= */
+function renderSide(){
+  const q=query.trim().toLowerCase();
+  const codes=KEYS.map(k=>k.code).filter(c=>{
+    const n=noteOf(c); if(!n) return false;
+    return !q || n.text.toLowerCase().includes(q);
+  });
+  const total=Object.keys(notes).filter(c=>noteOf(c)).length;
+  const chars=Object.keys(notes).reduce((s,c)=>{const n=noteOf(c);return s+(n?n.text.length:0);},0);
+  $('stNotes').textContent=total;
+  $('stChars').textContent=chars;
+  $('stPill').textContent=total;
+  $('stBar').style.width=(total/KEYS.length*100).toFixed(1)+'%';
+
+  if(!codes.length){
+    listEl.innerHTML='<div class="empty-state sm"><div>🗒</div>'+(q?'Ничего не найдено':'Пока пусто.<br>Нажмите любую клавишу.')+'</div>';
+    return;
+  }
+  listEl.innerHTML='';
+  codes.forEach(c=>{
+    const k=BY_CODE[c]; if(!k) return;
+    const n=noteOf(c);
+    const it=el('div','item'); it.style.setProperty('--h',hueOf(c));
+    const lab=labels(k);
+    it.innerHTML='<span class="cap">'+escapeHtml(lab.ico?lab.ico:lab.main)+'</span>'+
+      '<span style="flex:1;min-width:0"><span class="tx">'+escapeHtml(n.text)+'</span>'+
+      '<span class="meta">'+escapeHtml(keyTitle(k))+' · '+ago(n.updated)+' · '+n.text.length+' '+plural(n.text.length,['символ','символа','символов'])+'</span></span>'+
+      '<button class="del" title="Удалить">🗑</button>';
+    it.addEventListener('click',ev=>{
+      if(ev.target.closest('.del')){ deleteNote(c); return; }
+      highlight(c); openEditor(c);
+    });
+    listEl.appendChild(it);
+  });
+}
+function highlight(code){
+  const e=els[code]; if(!e) return;
+  e.root.classList.remove('hit'); void e.root.offsetWidth; e.root.classList.add('hit');
+  e.root.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});
+}
+
+/* ================= панель: общие заметки ================= */
+function renderGen(){
+  const q=query.trim().toLowerCase();
+  $('genPill').textContent=genNotes.length;
+  const items=genNotes
+    .filter(n=>!q || n.text.toLowerCase().includes(q))
+    .slice().sort((a,b)=>b.updated-a.updated);
+  if(!items.length){
+    genListEl.innerHTML='<div class="empty-state sm"><div>📝</div>'+(q?'Ничего не найдено':'Заметки без привязки к клавишам.<br>Нажмите «Добавить заметку».')+'</div>';
+    return;
+  }
+  genListEl.innerHTML='';
+  items.forEach(n=>{
+    const it=el('div','gitem');
+    it.innerHTML='<div class="tx">'+escapeHtml(n.text)+'</div>'+
+      '<div class="meta">'+ago(n.updated)+' · '+n.text.length+' '+plural(n.text.length,['символ','символа','символов'])+'</div>'+
+      '<button class="del" title="Удалить">🗑</button>';
+    it.addEventListener('click',ev=>{
+      if(ev.target.closest('.del')){ deleteGen(n.id); return; }
+      openGen(n.id);
+    });
+    genListEl.appendChild(it);
+  });
+}
+function refreshAll(){ refreshKeys(); renderSide(); renderGen(); }
+
+/* ================= стиль + тема ================= */
+function buildThemePicker(){
+  const box=$('themes'); box.innerHTML='';
+  THEMES.forEach(t=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='th'+(t.id===themeId?' on':''); b.dataset.theme=t.id;
+    b.innerHTML='<span class="dots">'+t.dots.map(c=>'<i style="background:'+c+'"></i>').join('')+'</span>'+
+                '<span class="nm">'+t.name+'</span><span class="ck">✔</span>';
+    b.addEventListener('click',()=>setTheme(t.id));
+    box.appendChild(b);
+  });
+  $('themeLbl').textContent=(THEME_BY_ID[themeId]||THEMES[0]).name;
+  $('rainbowChk').checked=rainbow;
+  syncStyleSeg();
+}
+function syncStyleSeg(){
+  Array.prototype.forEach.call($('styleSeg').children,b=>b.classList.toggle('on',b.dataset.style===styleId));
+}
+function applyHueToOpenWindows(){
+  if(curCode){
+    const h=hueOf(curCode);
+    backdrop.style.setProperty('--h',h);
+    $('mCap').style.setProperty('--h',h);
+  }
+  if(genBackdrop.classList.contains('show')){
+    genBackdrop.style.setProperty('--h',themeHue());
+    $('gCap').style.setProperty('--h',themeHue());
+  }
+  if(expBackdrop.classList.contains('show')){
+    expBackdrop.style.setProperty('--h',themeHue());
+    $('eCap').style.setProperty('--h',themeHue());
+  }
+}
+function setTheme(id){
+  if(!THEME_BY_ID[id]) return;
+  themeId=id; lsSet(LS_THEME,id);
+  document.body.dataset.theme=id;
+  $('themeLbl').textContent=THEME_BY_ID[id].name;
+  Array.prototype.forEach.call($('themes').children,b=>b.classList.toggle('on',b.dataset.theme===id));
+  hideBubble(); refreshAll(); applyHueToOpenWindows();
+}
+function setStyle(id){
+  if(!STYLE_BY_ID[id]) return;
+  styleId=id; lsSet(LS_STYLE,id);
+  document.body.dataset.style=id;
+  syncStyleSeg();
+  hideBubble(); refreshAll(); applyHueToOpenWindows();
+  toast('Стиль: '+STYLE_BY_ID[id].name);
+}
+function setRainbow(on){ rainbow=on; lsSet(LS_RAINBOW,on?'1':'0'); hideBubble(); refreshAll(); applyHueToOpenWindows(); }
+$('styleSeg').addEventListener('click',e=>{ const b=e.target.closest('.seg-b'); if(b) setStyle(b.dataset.style); });
+$('themeBtn').addEventListener('click',e=>{
+  e.stopPropagation();
+  const p=$('themePop'), open=p.classList.toggle('show');
+  $('themeBtn').setAttribute('aria-expanded',open?'true':'false');
+  if(open) hideBubble();
+});
+$('themePop').addEventListener('click',e=>e.stopPropagation());
+document.addEventListener('click',e=>{
+  const p=$('themePop');
+  if(p.classList.contains('show') && !p.contains(e.target) && e.target!==$('themeBtn')){
+    p.classList.remove('show'); $('themeBtn').setAttribute('aria-expanded','false');
+  }
+});
+$('rainbowChk').addEventListener('change',e=>setRainbow(e.target.checked));
+
+/* ================= размер клавиатуры ================= */
+function syncKbBtn(){ $('kbLbl').textContent = kbMode==='full' ? 'Полноразмерная' : 'Компактная'; }
+function setKbMode(mode){
+  if(mode!=='full' && mode!=='compact') return;
+  kbMode=mode; lsSet(LS_KB,mode);
+  hideBubble();
+  buildKeyboard(); refreshLabels(); refreshAll(); syncKbBtn();
+}
+$('kbBtn').addEventListener('click',()=>{
+  setKbMode(kbMode==='full'?'compact':'full');
+  toast(kbMode==='full'?'Полноразмерная клавиатура':'Компактная клавиатура');
+});
+
+/* ================= пузырёк ================= */
+let showT=null,hideT=null;
+function scheduleShow(code){ clearTimeout(hideT); clearTimeout(showT); showT=setTimeout(()=>showBubble(code),110); }
+function scheduleHide(){ clearTimeout(showT); clearTimeout(hideT); hideT=setTimeout(hideBubble,180); }
+function hideBubble(){ clearTimeout(showT); clearTimeout(hideT); bubble.classList.remove('show'); bubCode=null; }
+function showBubble(code){
+  const n=noteOf(code); if(!n) return;
+  const k=BY_CODE[code]; if(!k) return;
+  const lab=labels(k), h=hueOf(code);
+  bubCode=code;
+  bubble.style.setProperty('--h',h);
+  const cap=$('bCap'); cap.style.setProperty('--h',h); cap.className='cap';
+  cap.textContent=lab.ico||lab.main;
+  $('bMeta').innerHTML=escapeHtml(keyTitle(k))+'<br>'+ago(n.updated);
+  $('bText').textContent=n.text;
+  bubble.classList.add('show');
+  positionBubble(code);
+}
+function positionBubble(code){
+  const e=els[code]; if(!e) return;
+  const r=e.root.getBoundingClientRect();
+  const bw=bubble.offsetWidth,bh=bubble.offsetHeight,pad=10;
+  let left=r.left+r.width/2-bw/2;
+  left=Math.max(pad,Math.min(left,window.innerWidth-bw-pad));
+  let below=false,top=r.top-bh-13;
+  if(top<pad){ top=r.bottom+13; below=true; }
+  bubble.classList.toggle('below',below);
+  bubble.style.left=left+'px'; bubble.style.top=top+'px';
+  const ax=r.left+r.width/2-left;
+  bubble.style.setProperty('--ax',Math.max(18,Math.min(ax,bw-18))+'px');
+}
+$('bText').addEventListener('click',()=>{ const c=bubCode; hideBubble(); if(c) openEditor(c); });
+bubble.addEventListener('mouseenter',()=>clearTimeout(hideT));
+bubble.addEventListener('mouseleave',scheduleHide);
+window.addEventListener('scroll',()=>{ if(bubCode) positionBubble(bubCode); },true);
+window.addEventListener('resize',()=>{ if(bubCode) positionBubble(bubCode); });
+
+/* ================= редактор заметки на клавише ================= */
+const mInput=$('mInput');
+function openEditor(code){
+  const k=BY_CODE[code]; if(!k) return;
+  hideBubble(); closeExport(); closeGen();
+  curCode=code; lastFocus=document.activeElement;
+  const n=noteOf(code), lab=labels(k), h=hueOf(code);
+  backdrop.style.setProperty('--h',h);
+  const cap=$('mCap'); cap.style.setProperty('--h',h);
+  cap.className='cap'+(n?'':' empty');
+  cap.textContent=lab.ico||lab.main;
+  $('mTitle').textContent='Клавиша '+keyTitle(k);
+  $('mSub').textContent = n ? ('изменено '+ago(n.updated)+' · '+n.text.length+' '+plural(n.text.length,['символ','символа','символов'])) : 'заметка пуста — напишите что-нибудь';
+  mInput.value=n?n.text:'';
+  $('mDelete').style.display=n?'':'none';
+  updateCount();
+  backdrop.classList.add('show');
+  setTimeout(()=>{ mInput.focus(); mInput.setSelectionRange(mInput.value.length,mInput.value.length); },60);
+  press(code);
+}
+function closeEditor(){
+  backdrop.classList.remove('show'); curCode=null;
+  if(lastFocus&&lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} }
+}
+function updateCount(){ $('mCount').textContent=mInput.value.length+' / 600'; }
+mInput.addEventListener('input',updateCount);
+function saveNote(){
+  if(!curCode) return;
+  const v=mInput.value.trim();
+  if(!v){ deleteNote(curCode); return; }
+  notes[curCode]={text:v.slice(0,600),updated:Date.now()};
+  save(); refreshAll();
+  const c=curCode; closeEditor();
+  setTimeout(()=>{ if(els[c]){ els[c].root.classList.add('press'); setTimeout(()=>els[c].root.classList.remove('press'),140);} },120);
+  toast('Заметка сохранена на клавише '+keyTitle(BY_CODE[c]).toUpperCase());
+}
+function deleteNote(code){
+  const prev=notes[code]; if(!prev){ closeEditor(); return; }
+  delete notes[code]; save(); refreshAll();
+  if(curCode===code) closeEditor();
+  hideBubble();
+  toast('Заметка удалена — клавиша снова пустая','Отменить',()=>{ notes[code]=prev; save(); refreshAll(); highlight(code); });
+}
+$('mSave').addEventListener('click',saveNote);
+$('mCancel').addEventListener('click',closeEditor);
+$('mClose').addEventListener('click',closeEditor);
+$('mDelete').addEventListener('click',()=>{ if(curCode) deleteNote(curCode); });
+backdrop.addEventListener('mousedown',e=>{ if(e.target===backdrop) closeEditor(); });
+
+/* ================= общие заметки ================= */
+const gInput=$('gInput');
+function newId(){ return 'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function openGen(id){
+  hideBubble(); closeExport(); closeEditor();
+  curGen=id||null;
+  lastFocus=document.activeElement;
+  const n = id ? genNotes.find(x=>x.id===id) : null;
+  const h=themeHue();
+  genBackdrop.style.setProperty('--h',h);
+  const cap=$('gCap'); cap.style.setProperty('--h',h); cap.className='cap'; cap.textContent='✎';
+  $('gTitle').textContent = n ? 'Общая заметка' : 'Новая общая заметка';
+  $('gSub').textContent = n ? ('не привязана к клавише · изменено '+ago(n.updated)) : 'не привязана к клавише';
+  gInput.value = n ? n.text : '';
+  $('gDelete').style.display = n ? '' : 'none';
+  gUpdateCount();
+  genBackdrop.classList.add('show');
+  setTimeout(()=>{ gInput.focus(); gInput.setSelectionRange(gInput.value.length,gInput.value.length); },60);
+}
+function closeGen(){
+  genBackdrop.classList.remove('show'); curGen=null;
+  if(lastFocus&&lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} }
+}
+function gUpdateCount(){ $('gCount').textContent=gInput.value.length+' / 1200'; }
+gInput.addEventListener('input',gUpdateCount);
+function saveGenNote(){
+  const v=gInput.value.trim();
+  if(!v){ if(curGen) deleteGen(curGen); else closeGen(); return; }
+  const now=Date.now();
+  if(curGen){
+    const n=genNotes.find(x=>x.id===curGen);
+    if(n){ n.text=v.slice(0,1200); n.updated=now; }
+  }else{
+    genNotes.push({id:newId(),text:v.slice(0,1200),created:now,updated:now});
+  }
+  saveGen(); refreshAll(); closeGen();
+  toast('Общая заметка сохранена');
+}
+function deleteGen(id){
+  const idx=genNotes.findIndex(x=>x.id===id);
+  if(idx<0){ closeGen(); return; }
+  const prev=genNotes[idx];
+  genNotes.splice(idx,1); saveGen(); refreshAll();
+  if(curGen===id) closeGen();
+  toast('Общая заметка удалена','Отменить',()=>{
+    genNotes.splice(Math.min(idx,genNotes.length),0,prev); saveGen(); refreshAll();
+  });
+}
+$('genAdd').addEventListener('click',()=>openGen(null));
+$('gSave').addEventListener('click',saveGenNote);
+$('gCancel').addEventListener('click',closeGen);
+$('gClose').addEventListener('click',closeGen);
+$('gDelete').addEventListener('click',()=>{ if(curGen) deleteGen(curGen); });
+genBackdrop.addEventListener('mousedown',e=>{ if(e.target===genBackdrop) closeGen(); });
+
+/* ================= toast ================= */
+let toastT=null;
+function toast(msg,actLabel,actFn){
+  const t=$('toast'); $('toastMsg').textContent=msg;
+  const b=$('toastAct');
+  if(actLabel){ b.hidden=false; b.textContent=actLabel; b.onclick=()=>{ actFn&&actFn(); t.classList.remove('show'); }; }
+  else { b.hidden=true; b.onclick=null; }
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'), actLabel?6000:3600);
+}
+
+/* ================= клавиши ================= */
+function press(code){
+  const e=els[code]; if(!e) return;
+  e.root.classList.add('press');
+  setTimeout(()=>e.root.classList.remove('press'),120);
+}
+function bindKey(code,btn){
+  btn.addEventListener('click',()=>openEditor(code));
+  btn.addEventListener('mouseenter',()=>{ if(noteOf(code)) scheduleShow(code); else hideBubble(); });
+  btn.addEventListener('mouseleave',scheduleHide);
+  btn.addEventListener('focus',()=>{ if(noteOf(code)) scheduleShow(code); });
+  btn.addEventListener('blur',scheduleHide);
+}
+
+document.addEventListener('keydown',e=>{
+  if(expBackdrop.classList.contains('show')){
+    if(e.key==='Escape'){ e.preventDefault(); closeExport(); }
+    return;
+  }
+  if(genBackdrop.classList.contains('show')){
+    if(e.key==='Escape'){ e.preventDefault(); closeGen(); return; }
+    if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); saveGenNote(); return; }
+    return;
+  }
+  if(backdrop.classList.contains('show')){
+    if(e.key==='Escape'){ e.preventDefault(); closeEditor(); return; }
+    if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); saveNote(); return; }
+    return;
+  }
+  const t=e.target, tag=t&&t.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||(t&&t.isContentEditable)){
+    if(e.key==='Escape'&&t===$('search')){ $('search').value=''; query=''; refreshAll(); $('search').blur(); }
+    return;
+  }
+  if(e.key==='Escape'){
+    const p=$('themePop');
+    if(p.classList.contains('show')){ p.classList.remove('show'); $('themeBtn').setAttribute('aria-expanded','false'); return; }
+    hideBubble(); return;
+  }
+  if(e.code&&BY_CODE[e.code]){
+    press(e.code);
+    if(capture){ e.preventDefault(); openEditor(e.code); }
+  }
+});
+
+/* ================= экспорт ================= */
+const canPickDir = typeof window.showDirectoryPicker === 'function';
+let dirHandle=null, pvOpen=false;
+
+function buildExportData(){
+  return JSON.stringify({app:'keynotes',version:2,theme:themeId,style:styleId,kbMode:kbMode,
+    exported:new Date().toISOString(),notes:notes,generalNotes:genNotes},null,2);
+}
+function suggestedName(){
+  const d=new Date(),p=n=>String(n).padStart(2,'0');
+  return 'keyboard-notes-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'.json';
+}
+function fixName(v){
+  let n=(v||'').trim().replace(/[\\/:*?"<>|]+/g,'-').slice(0,80);
+  if(!n) n=suggestedName();
+  if(!/\.json$/i.test(n)) n+='.json';
+  return n;
+}
+function prettySize(b){
+  if(b<1024) return b+' Б';
+  if(b<1048576) return (b/1024).toFixed(1)+' КБ';
+  return (b/1048576).toFixed(2)+' МБ';
+}
+function notesCount(){ return Object.keys(notes).filter(c=>noteOf(c)).length; }
+
+function updateDirBox(){
+  const box=$('eDirBox'),txt=$('eDir'),btn=$('eDirBtn');
+  if(dirHandle){
+    box.classList.remove('empty'); txt.textContent=dirHandle.name; btn.textContent='Сменить…';
+    box.title='Файл будет записан в эту папку';
+  }else{
+    box.classList.add('empty');
+    txt.textContent = canPickDir ? 'не выбрана — по умолчанию «Загрузки»' : 'выбор папки не поддерживается браузером';
+    btn.textContent='Выбрать…'; btn.disabled=!canPickDir; box.title='';
+  }
+  let hint;
+  if(dirHandle) hint='«Сохранить» запишет файл «'+fixName($('eName').value)+'» в папку «'+dirHandle.name+'».';
+  else if(canPickDir) hint='Папка не выбрана — файл сохранится в стандартную папку «Загрузки». Выберите папку, чтобы сохранять в другое место.';
+  else hint='Браузер не поддерживает выбор папки — файл сохранится в «Загрузки». JSON также можно скопировать в буфер обмена.';
+  $('eHint').textContent=hint;
+}
+function openExport(){
+  const total=notesCount(), gTotal=genNotes.length;
+  const json=buildExportData(), bytes=new Blob([json]).size;
+  const h=themeHue();
+  expBackdrop.style.setProperty('--h',h);
+  const cap=$('eCap'); cap.style.setProperty('--h',h); cap.className='cap'+((total||gTotal)?'':' empty');
+  $('eSub').textContent=(total||gTotal)
+    ? total+' '+plural(total,['заметка','заметки','заметок'])+' на клавишах · '+gTotal+' '+plural(gTotal,['общая','общие','общих'])+' · '+prettySize(bytes)
+    : 'заметок пока нет';
+  $('eName').value=suggestedName();
+  $('ePreview').textContent=json;
+  $('eCount').textContent=prettySize(bytes)+' · '+json.length+' '+plural(json.length,['символ','символа','символов']);
+  ['eSave','eCopy'].forEach(id=>{ $(id).disabled = !(total||gTotal); });
+  $('pv').classList.toggle('open',pvOpen);
+  $('pvToggle').setAttribute('aria-expanded',pvOpen?'true':'false');
+  updateDirBox(); hideBubble();
+  lastFocus=document.activeElement;
+  expBackdrop.classList.add('show');
+  setTimeout(()=>$('eName').focus(),80);
+}
+function closeExport(){
+  if(!expBackdrop.classList.contains('show')) return;
+  expBackdrop.classList.remove('show');
+  if(lastFocus&&lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} }
+}
+$('exportBtn').addEventListener('click',openExport);
+$('eClose').addEventListener('click',closeExport);
+expBackdrop.addEventListener('mousedown',e=>{ if(e.target===expBackdrop) closeExport(); });
+$('eName').addEventListener('input',updateDirBox);
+$('pvToggle').addEventListener('click',()=>{
+  pvOpen=!pvOpen;
+  $('pv').classList.toggle('open',pvOpen);
+  $('pvToggle').setAttribute('aria-expanded',pvOpen?'true':'false');
+});
+async function ensurePermission(handle,mode){
+  const opts={mode:mode};
+  try{
+    if(await handle.queryPermission(opts)==='granted') return true;
+    if(await handle.requestPermission(opts)==='granted') return true;
+  }catch(e){}
+  return false;
+}
+$('eDirBtn').addEventListener('click',async ()=>{
+  if(!canPickDir){ toast('Браузер не поддерживает выбор папки — файл сохранится в «Загрузки»'); return; }
+  try{
+    const h=await window.showDirectoryPicker({id:'keynotes-export',mode:'readwrite',startIn:'documents'});
+    if(!await ensurePermission(h,'readwrite')){ toast('Нет разрешения на запись в папку «'+h.name+'»'); return; }
+    dirHandle=h; updateDirBox(); toast('Папка выбрана: '+h.name);
+  }catch(err){
+    if(err&&err.name==='AbortError'){ toast('Выбор папки отменён'); return; }
+    toast('Не удалось открыть выбор папки');
+  }
+});
+async function copyText(txt){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(txt); return true; }
+  }catch(e){}
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=txt; ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;top:-2000px;left:0;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,txt.length);
+    const ok=document.execCommand('copy'); ta.remove(); return ok;
+  }catch(e){ return false; }
+}
+$('eCopy').addEventListener('click',async e=>{
+  const json=buildExportData();
+  const btn=e.currentTarget, old=btn.innerHTML;
+  if(await copyText(json)){
+    btn.innerHTML='✓ Скопировано';
+    setTimeout(()=>{ btn.innerHTML=old; },1600);
+    toast('JSON скопирован в буфер обмена · '+json.length+' '+plural(json.length,['символ','символа','символов']));
+  }else{
+    if(!pvOpen){ pvOpen=true; $('pv').classList.add('open'); $('pvToggle').setAttribute('aria-expanded','true'); }
+    toast('Браузер не дал доступ к буферу — выделите текст ниже и нажмите Ctrl+C');
+  }
+});
+function downloadToDefault(json,name){
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=name; a.rel='noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2500);
+  closeExport();
+  toast('Файл «'+name+'» сохранён в папку «Загрузки»');
+}
+$('eSave').addEventListener('click',async ()=>{
+  if(!(notesCount()||genNotes.length)){ toast('Экспортировать нечего — заметок нет'); return; }
+  const json=buildExportData(), name=fixName($('eName').value);
+  if(!dirHandle){ downloadToDefault(json,name); return; }
+  if(!await ensurePermission(dirHandle,'readwrite')){ toast('Нет разрешения на запись в папку «'+dirHandle.name+'»'); return; }
+  try{
+    const fh=await dirHandle.getFileHandle(name,{create:true});
+    const w=await fh.createWritable();
+    await w.write(new Blob([json],{type:'application/json'}));
+    await w.close();
+    closeExport();
+    toast('Сохранено: '+dirHandle.name+' / '+name);
+  }catch(err){ toast('Не удалось записать файл: '+((err&&err.message)||err)); }
+});
+
+/* ================= прочие кнопки ================= */
+$('layoutBtn').addEventListener('click',()=>{
+  layout = layout==='lat' ? 'cyr' : 'lat';
+  lsSet(LS_LAY,layout); refreshLabels(); renderSide();
+});
+$('captureChk').checked=capture;
+$('captureChk').addEventListener('change',e=>{
+  capture=e.target.checked; lsSet(LS_CAP,capture?'1':'0');
+  toast(capture?'Захват клавиш включён: нажатие клавиши открывает её заметку':'Захват клавиш выключен');
+});
+let sT=null;
+$('search').addEventListener('input',e=>{
+  clearTimeout(sT); const v=e.target.value;
+  sT=setTimeout(()=>{ query=v; applyFilter(); renderSide(); renderGen(); },110);
+});
+$('importBtn').addEventListener('click',()=>$('fileIn').click());
+$('fileIn').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const d=JSON.parse(rd.result);
+      const src=d&&d.notes?d.notes:d;
+      let n=0; const out={};
+      Object.keys(src).forEach(k=>{
+        if(!BY_CODE[k]) return;
+        const v=src[k];
+        const text=typeof v==='string'?v:(v&&v.text);
+        if(text&&String(text).trim()){ out[k]={text:String(text).slice(0,600),updated:(v&&v.updated)||Date.now()}; n++; }
+      });
+      let g=0; const gOut=[];
+      const gSrc=(d&&Array.isArray(d.generalNotes))?d.generalNotes:(Array.isArray(d)?d:[]);
+      gSrc.forEach(v=>{
+        const text=typeof v==='string'?v:(v&&v.text);
+        if(text&&String(text).trim()){
+          gOut.push({id:(v&&v.id)||newId(),text:String(text).slice(0,1200),
+            created:(v&&v.created)||Date.now(),updated:(v&&v.updated)||Date.now()});
+          g++;
+        }
+      });
+      notes=out; genNotes=gOut; save(); saveGen(); refreshAll();
+      toast('Импортировано: '+n+' на клавишах, '+g+' общих');
+    }catch(err){ toast('Не удалось прочитать файл'); }
+    e.target.value='';
+  };
+  rd.readAsText(f);
+});
+$('clearBtn').addEventListener('click',()=>{
+  const codes=Object.keys(notes).filter(c=>noteOf(c));
+  const gN=genNotes.length;
+  if(!codes.length&&!gN){ toast('Удалять нечего — заметок нет'); return; }
+  const snapN=JSON.parse(JSON.stringify(notes));
+  const snapG=JSON.parse(JSON.stringify(genNotes));
+  notes={}; genNotes=[]; save(); saveGen(); refreshAll(); hideBubble();
+  toast('Удалено: '+codes.length+' на клавишах, '+gN+' общих','Отменить',()=>{
+    notes=snapN; genNotes=snapG; save(); saveGen(); refreshAll();
+  });
+});
+
+/* ================= старт ================= */
+document.body.dataset.theme=themeId;
+document.body.dataset.style=styleId;
+buildThemePicker();
+syncKbBtn();
+buildKeyboard();
+refreshLabels();
+if(!Object.keys(notes).some(c=>noteOf(c)) && !genNotes.length){
+  notes['KeyQ']={text:'Привет! Это первая заметка — она живёт прямо на клавише. Наведи мышь на любую подсвеченную клавишу, чтобы прочитать текст, и кликни по нему, чтобы изменить или удалить.',updated:Date.now()};
+  notes['Space']={text:'Пробел тоже умеет хранить мысли :)',updated:Date.now()-3600e3};
+  notes['Digit1']={text:'Ctrl + Enter — сохранить, Esc — отмена',updated:Date.now()-7200e3};
+  notes['KeyT']={text:'Кнопка 🎨 меняет стиль (Glass / Neumorph) и одну из 8 цветовых схем.',updated:Date.now()-86400e3};
+  notes['KeyE']={text:'Экспорт: задай имя файла, при желании выбери папку и нажми «Сохранить» — или скопируй JSON.',updated:Date.now()-900e3};
+  genNotes.push({id:newId(),text:'Это общая заметка — она не привязана к клавише. Кнопка «⌨» сверху переключает компактную и полноразмерную раскладку.',created:Date.now(),updated:Date.now()});
+  save(); saveGen();
+}
+refreshAll();
+})();
+</script>
+</body>
+</html>
